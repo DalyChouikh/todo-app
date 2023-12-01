@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace = "dev.daly.todo_app"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "dev.daly.todo_app"
