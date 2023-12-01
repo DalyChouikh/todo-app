@@ -2,9 +2,12 @@ package dev.daly.todo_app;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 
@@ -16,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
     EditText username, password, confirmPassword;
     MaterialButton registerBtn, loginBtn;
+    DB db;
 
 
 
@@ -29,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         confirmPassword = binding.cPassword;
         registerBtn = binding.signUpBtn;
         loginBtn = binding.signInBtn;
+        db = new DB(MainActivity.this);
 
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -36,6 +41,10 @@ public class MainActivity extends AppCompatActivity {
                 String usernameStr = username.getText().toString();
                 String passwordStr = password.getText().toString();
                 String confirmPasswordStr = confirmPassword.getText().toString();
+                if(!isConnected()){
+                    Toast.makeText(MainActivity.this, "❌ No Internet Connection", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (usernameStr.isEmpty() || passwordStr.isEmpty() || confirmPasswordStr.isEmpty()) {
                     if (usernameStr.isEmpty()) {
                         username.setError("Username cannot be empty");
@@ -48,27 +57,38 @@ public class MainActivity extends AppCompatActivity {
                     }
                 } else {
                     if (passwordStr.equals(confirmPasswordStr)) {
-                        DB db = new DB(MainActivity.this);
-                        if (!db.checkUsername(usernameStr)) {
-                            db.insertUser(usernameStr, passwordStr);
-                            username.setText("");
-                            password.setText("");
-                            confirmPassword.setText("");
-                        } else {
+                        if (db.checkUsername(usernameStr)) {
                             username.setError("Username already exists");
+                        } else {
+                            if (db.insertUser(usernameStr, passwordStr)) {
+                                Toast.makeText(MainActivity.this, "✅ User registered Successfully", Toast.LENGTH_SHORT).show();
+                                username.setText("");
+                                password.setText("");
+                                confirmPassword.setText("");
+                                startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                            } else {
+                                Toast.makeText(MainActivity.this, "❌ Registration Failed", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     } else {
                         confirmPassword.setError("Passwords do not match");
                     }
                 }
+
             }
             }
         );
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
 
             }
         });
+    }
+    boolean isConnected() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnectedOrConnecting();
     }
 }

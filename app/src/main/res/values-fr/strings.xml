@@ -7,4 +7,8 @@
     <string name="confirm_password">Confirmer mot de passe</string>
     <string name="register">Registre</string>
     <string name="already_have_an_account">Vous avez déjà un compte?</string>
+    <string name="sign_in">Se connecter</string>
+    <string name="login">Se connecter</string>
+    <string name="dont_have_an_account">Vous n\'avez pas de compte?</string>
+    <string name="developed_by_daly">Développé avec ❤️ par Daly</string>
 </resources>
