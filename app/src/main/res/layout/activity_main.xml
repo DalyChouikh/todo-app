@@ -1,18 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/signup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="25dp"
+        android:gravity="center"
+        android:fontFamily="@font/jetbrainsmono_bold"
+        android:text="@string/sign_up"
+        android:textColor="@color/white"
+        android:textSize="35sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/signup"
+        android:hint="@string/username"
+        android:layout_margin="25dp"
+        android:autofillHints="username"
+        android:inputType="text"
+        android:padding="20dp"
+        android:fontFamily="@font/jetbrainsmono_bold"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:background="#30ffffff"
+        android:textStyle="bold"
+        android:textColorHint="@color/white"
+        android:drawableStart="@drawable/baseline_person_outline_24"
+        android:drawablePadding="15dp"
+        />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/username"
+        android:hint="@string/password"
+        android:background="#30ffffff"
+        android:layout_margin="25dp"
+        android:autofillHints="password"
+        android:inputType="textPassword"
+        android:textColorHint="@color/white"
+        android:padding="20dp"
+        android:fontFamily="@font/jetbrainsmono_bold"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:drawableStart="@drawable/password_white_24dp"
+        android:drawablePadding="15dp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/cpassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/password"
+        android:hint="@string/confirm_password"
+        android:background="#30ffffff"
+        android:layout_margin="25dp"
+        android:autofillHints="password"
+        android:inputType="textPassword"
+        android:textColorHint="@color/white"
+        android:padding="20dp"
+        android:fontFamily="@font/jetbrainsmono_bold"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:drawableStart="@drawable/password_white_24dp"
+        android:drawablePadding="15dp"
+        android:textStyle="bold" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/signupbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_below="@id/cpassword"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="25dp"
+        android:backgroundTint="@color/design_default_color_secondary"
+        android:fontFamily="@font/jetbrainsmono_bold"
+        android:padding="20dp"
+        android:text="@string/register"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
