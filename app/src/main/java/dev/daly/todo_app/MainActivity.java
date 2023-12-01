@@ -2,14 +2,19 @@ package dev.daly.todo_app;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.button.MaterialButton;
+
+import org.json.JSONException;
 
 import dev.daly.todo_app.databinding.ActivityMainBinding;
 
@@ -20,7 +25,11 @@ public class MainActivity extends AppCompatActivity {
     EditText username, password, confirmPassword;
     MaterialButton registerBtn, loginBtn;
     DB db;
+    RequestHandler requestHandler;
 
+    public static Context getContext() {
+        return getContext();
+    }
 
 
     @Override
@@ -34,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         registerBtn = binding.signUpBtn;
         loginBtn = binding.signInBtn;
         db = new DB(MainActivity.this);
+        requestHandler = new RequestHandler();
 
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +75,13 @@ public class MainActivity extends AppCompatActivity {
                                 username.setText("");
                                 password.setText("");
                                 confirmPassword.setText("");
+                                Log.d("Request", "Sending request");
+                                try {
+                                    requestHandler.createUser(usernameStr, passwordStr);
+                                    Volley.newRequestQueue(MainActivity.this).add(requestHandler.createUser(usernameStr, passwordStr));
+                                } catch (JSONException e) {
+                                    throw new RuntimeException(e);
+                                }
                                 startActivity(new Intent(MainActivity.this, HomeActivity.class));
                             } else {
                                 Toast.makeText(MainActivity.this, "❌ Registration Failed", Toast.LENGTH_SHORT).show();

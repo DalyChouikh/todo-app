@@ -22,6 +22,7 @@ public class DB extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase myDB, int i, int i1) {
         myDB.execSQL("DROP TABLE IF EXISTS users");
+        onCreate(myDB);
     }
 
     public boolean insertUser(String username, String password) {
