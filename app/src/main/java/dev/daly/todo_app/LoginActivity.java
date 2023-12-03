@@ -48,7 +48,9 @@ public class LoginActivity extends AppCompatActivity {
                 if (db.checkUsernamePassword(usernameStr, passwordStr)) {
                     Toast.makeText(LoginActivity.this, "✅ Login Successful", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                    intent.putExtra("username", usernameStr);
                     startActivity(intent);
+                    finish();
                 } else {
                     username.setError("Invalid Credentials");
                     password.setError("Invalid Credentials");
@@ -58,6 +60,7 @@ public class LoginActivity extends AppCompatActivity {
         registerBtn.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
+            finish();
         });
     }
 

@@ -80,7 +80,10 @@ public class MainActivity extends AppCompatActivity {
                             } catch (JSONException e) {
                                 throw new RuntimeException(e);
                             }
-                            startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                            intent.putExtra("username", usernameStr);
+                            startActivity(intent);
+                            finish();
                         } else {
                             Toast.makeText(MainActivity.this, "❌ Registration Failed", Toast.LENGTH_SHORT).show();
                         }

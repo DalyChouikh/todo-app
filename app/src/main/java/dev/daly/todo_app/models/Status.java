@@ -14,6 +14,7 @@ public enum Status {
     }
 
     public static Status fromString(String status) {
+        status = status.replace("_","");
         for (Status s : Status.values()) {
             if (s.status.equalsIgnoreCase(status)) {
                 return s;

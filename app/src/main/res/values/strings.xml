@@ -16,4 +16,6 @@
     <string name="task_description">Description</string>
     <string name="save">Save</string>
     <string name="done">Done</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
 </resources>

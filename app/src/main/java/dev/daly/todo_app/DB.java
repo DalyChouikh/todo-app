@@ -20,7 +20,7 @@ public class DB extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase myDB, int i, int i1) {
+    public void onUpgrade(SQLiteDatabase myDB, int oldVersion, int newVersion) {
         myDB.execSQL("DROP TABLE IF EXISTS users");
         onCreate(myDB);
     }

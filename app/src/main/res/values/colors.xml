@@ -10,4 +10,5 @@
     <color name="cyan">#00FFFF</color>
     <color name="light_gray">#D3D3D3</color>
     <color name="darker_gray">#A9A9A9</color>
+    <color name="red">@android:color/holo_red_dark</color>
 </resources>
