@@ -4,19 +4,49 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".HomeActivity">
 
     <TextView
-        android:id="@+id/signUp"
-        android:layout_width="match_parent"
+        android:id="@+id/tasksTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="25dp"
+        android:layout_margin="20dp"
         android:gravity="center"
         android:fontFamily="@font/jetbrainsmono_bold"
-        android:text="@string/sign_up"
-        android:textColor="@color/black"
+        android:text="@string/tasks"
+        android:textColor="@color/purple"
         android:textSize="35sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:drawableStartCompat="@drawable/baseline_checklist_24"
+        android:drawablePadding="15dp"
+        />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/tasksRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tasksTextView"
+        android:layout_margin="20dp"
+        android:nestedScrollingEnabled="true"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/task_layout" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addTaskButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="25dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="249dp"
+        android:layout_marginBottom="237dp"
+        android:clickable="true"
+        app:backgroundTint="@color/purple"
+        android:contentDescription="@string/fb_add_task"
+        android:src="@drawable/add_fill0_wght400_grad0_opsz24"
+        app:fabSize="normal"
+        android:focusable="true" />
 </RelativeLayout>

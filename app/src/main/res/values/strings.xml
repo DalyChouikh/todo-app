@@ -10,4 +10,10 @@
     <string name="login">Login</string>
     <string name="dont_have_an_account">Don\'t have an account?</string>
     <string name="developed_by_daly">Developed with ❤️ by Daly</string>
+    <string name="tasks">Tasks</string>
+    <string name="fb_add_task">Add task</string>
+    <string name="task_title">Task title</string>
+    <string name="task_description">Description</string>
+    <string name="save">Save</string>
+    <string name="done">Done</string>
 </resources>

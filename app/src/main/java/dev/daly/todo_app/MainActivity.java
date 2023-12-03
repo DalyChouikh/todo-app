@@ -45,63 +45,57 @@ public class MainActivity extends AppCompatActivity {
         db = new DB(MainActivity.this);
         requestHandler = new RequestHandler();
 
-        registerBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String usernameStr = username.getText().toString();
-                String passwordStr = password.getText().toString();
-                String confirmPasswordStr = confirmPassword.getText().toString();
-                if(!isConnected()){
-                    Toast.makeText(MainActivity.this, "❌ No Internet Connection", Toast.LENGTH_SHORT).show();
-                    return;
+        registerBtn.setOnClickListener(v -> {
+            String usernameStr = username.getText().toString();
+            String passwordStr = password.getText().toString();
+            String confirmPasswordStr = confirmPassword.getText().toString();
+            if(!isConnected()){
+                Toast.makeText(MainActivity.this, "❌ No Internet Connection", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (usernameStr.isEmpty() || passwordStr.isEmpty() || confirmPasswordStr.isEmpty()) {
+                if (usernameStr.isEmpty()) {
+                    username.setError("Username cannot be empty");
                 }
-                if (usernameStr.isEmpty() || passwordStr.isEmpty() || confirmPasswordStr.isEmpty()) {
-                    if (usernameStr.isEmpty()) {
-                        username.setError("Username cannot be empty");
-                    }
-                    if (passwordStr.isEmpty()) {
-                        password.setError("Password cannot be empty");
-                    }
-                    if (confirmPasswordStr.isEmpty()) {
-                        confirmPassword.setError("Confirm Password cannot be empty");
+                if (passwordStr.isEmpty()) {
+                    password.setError("Password cannot be empty");
+                }
+                if (confirmPasswordStr.isEmpty()) {
+                    confirmPassword.setError("Confirm Password cannot be empty");
+                }
+            } else {
+                if (passwordStr.equals(confirmPasswordStr)) {
+                    if (db.checkUsername(usernameStr)) {
+                        username.setError("Username already exists");
+                    } else {
+                        if (db.insertUser(usernameStr, passwordStr)) {
+                            Toast.makeText(MainActivity.this, "✅ User registered Successfully", Toast.LENGTH_SHORT).show();
+                            username.setText("");
+                            password.setText("");
+                            confirmPassword.setText("");
+                            Log.d("Request", "Sending request");
+                            try {
+                                requestHandler.createUser(usernameStr, passwordStr);
+                                Volley.newRequestQueue(MainActivity.this).add(requestHandler.createUser(usernameStr, passwordStr));
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                            startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                        } else {
+                            Toast.makeText(MainActivity.this, "❌ Registration Failed", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 } else {
-                    if (passwordStr.equals(confirmPasswordStr)) {
-                        if (db.checkUsername(usernameStr)) {
-                            username.setError("Username already exists");
-                        } else {
-                            if (db.insertUser(usernameStr, passwordStr)) {
-                                Toast.makeText(MainActivity.this, "✅ User registered Successfully", Toast.LENGTH_SHORT).show();
-                                username.setText("");
-                                password.setText("");
-                                confirmPassword.setText("");
-                                Log.d("Request", "Sending request");
-                                try {
-                                    requestHandler.createUser(usernameStr, passwordStr);
-                                    Volley.newRequestQueue(MainActivity.this).add(requestHandler.createUser(usernameStr, passwordStr));
-                                } catch (JSONException e) {
-                                    throw new RuntimeException(e);
-                                }
-                                startActivity(new Intent(MainActivity.this, HomeActivity.class));
-                            } else {
-                                Toast.makeText(MainActivity.this, "❌ Registration Failed", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    } else {
-                        confirmPassword.setError("Passwords do not match");
-                    }
+                    confirmPassword.setError("Passwords do not match");
                 }
+            }
 
-            }
-            }
+        }
         );
-        loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
+        loginBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
 
-            }
         });
     }
     boolean isConnected() {
