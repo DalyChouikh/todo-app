@@ -40,6 +40,7 @@ public class HomeActivity extends AppCompatActivity implements DialogInterface {
     private TaskAdapter taskAdapter;
     private List<Task> tasks;
     private FloatingActionButton addTaskButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +48,7 @@ public class HomeActivity extends AppCompatActivity implements DialogInterface {
         setContentView(binding.getRoot());
         tasks = new ArrayList<>();
         addTaskButton = binding.addTaskButton;
-        requestHandler = new RequestHandler();
+        requestHandler = new RequestHandler(this);
         recyclerView = binding.tasksRecyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         taskAdapter = new TaskAdapter(this);
@@ -57,8 +58,10 @@ public class HomeActivity extends AppCompatActivity implements DialogInterface {
         try {
             Intent intent = getIntent();
             String username = intent.getStringExtra("username");
-            Volley.newRequestQueue(HomeActivity.this).add(getUserTasks(username));
-            taskAdapter.setTasks(tasks);
+            requestHandler.getUserTasks(username, tasks -> {
+                System.out.println(tasks.toString());
+                taskAdapter.setTasks(tasks);
+            });
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -69,36 +72,18 @@ public class HomeActivity extends AppCompatActivity implements DialogInterface {
 
     }
 
-    public JsonArrayRequest getUserTasks(String username) throws JSONException {
-        String url = "http://192.168.1.17:8082/api/v1/users/" + username + "/tasks";
-        return new JsonArrayRequest(Request.Method.GET, url, null, response -> {
-            Log.d("Response", response.toString());
-            for (int i = 0; i < response.length(); i++) {
-                try {
-                    JSONObject jsonObject = response.getJSONObject(i);
-                    String title = jsonObject.getString("title");
-                    String status = jsonObject.getString("status");
-                    this.tasks.add(new Task(title, status));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            Collections.reverse(tasks);
-            taskAdapter.setTasks(tasks);
-            Toast.makeText(this, response.toString(), Toast.LENGTH_SHORT).show();
-        }, Throwable::printStackTrace);
-    }
-
     @Override
     public void handleDialogClose(android.content.DialogInterface dialogInterface) {
         try {
+            Thread.sleep(1000);
             Intent intent = getIntent();
             String username = intent.getStringExtra("username");
-            Volley.newRequestQueue(HomeActivity.this).add(getUserTasks(username));
-            Collections.reverse(tasks);
-            taskAdapter.setTasks(tasks);
-            taskAdapter.notifyDataSetChanged();
-        } catch (JSONException e) {
+            requestHandler.getUserTasks(username, tasks -> {
+                System.out.println(tasks.toString());
+                taskAdapter.setTasks(tasks);
+                taskAdapter.notifyDataSetChanged();
+            });
+        } catch (JSONException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }

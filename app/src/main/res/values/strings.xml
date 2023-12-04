@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">todo-app</string>
     <string name="sign_up">Sign Up</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
@@ -18,4 +17,5 @@
     <string name="done">Done</string>
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
+    <string name="app_name">TaskFlow</string>
 </resources>

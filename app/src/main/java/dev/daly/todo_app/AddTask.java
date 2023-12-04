@@ -24,10 +24,12 @@ import org.json.JSONObject;
 
 public class AddTask extends BottomSheetDialogFragment {
 
-    public static final String TAG = "ActionBottomDialog";
+    public static final String TAG = "AddTask";
 
     private EditText newTaskTitle;
     private Button newTaskSaveButton;
+
+    RequestHandler requestHandler;
 
     public static AddTask newInstance() {
         return new AddTask();
@@ -37,34 +39,32 @@ public class AddTask extends BottomSheetDialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(STYLE_NORMAL, R.style.DialogStyle);
+        requestHandler = new RequestHandler(getContext());
     }
 
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle savedInstanceState) {
-        View view = layoutInflater.inflate(R.layout.new_task, viewGroup, false);
-        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        return view;
+        //        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        return layoutInflater.inflate(R.layout.new_task, viewGroup, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        newTaskTitle = getView().findViewById(R.id.taskTitleEditText);
-        newTaskSaveButton = getView().findViewById(R.id.addTaskButton);
-
-        boolean isUpdate;
+        newTaskTitle =  view.findViewById(R.id.taskTitleEditText);
+        newTaskSaveButton = view.findViewById(R.id.addTaskButton);
+        boolean isUpdate = false;
         final Bundle bundle = getArguments();
         if (bundle != null) {
             Log.d("Bundle", "Bundle is not null");
             isUpdate = true;
+            String title = bundle.getString("title");
+            newTaskTitle.setText(title);
             if (!newTaskTitle.getText().toString().isEmpty()) {
                 newTaskSaveButton.setTextColor(getResources().getColor(R.color.purple));
             } else {
                 newTaskSaveButton.setTextColor(getResources().getColor(R.color.darker_gray));
             }
-
-        } else {
-            isUpdate = false;
         }
         newTaskTitle.addTextChangedListener(new TextWatcher() {
             @Override
@@ -86,22 +86,24 @@ public class AddTask extends BottomSheetDialogFragment {
 
             }
         });
+        boolean finalIsUpdate = isUpdate;
         newTaskSaveButton.setOnClickListener(v -> {
-            String title = bundle.getString("title");
             String username = getActivity().getIntent().getStringExtra("username");
-            if(isUpdate){
+            if (finalIsUpdate) {
+                String oldTitle = bundle.getString("title");
+                String newTitle = newTaskTitle.getText().toString();
                 try {
-                    Volley.newRequestQueue(getContext()).add(updateTask(username, title));
+                    requestHandler.updateTask(username, oldTitle, newTitle);
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
-                dismiss();
-                return;
-            }
-            try {
-                Volley.newRequestQueue(getContext()).add(addTask(username, title));
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
+            } else {
+                try {
+                    String title = newTaskTitle.getText().toString();
+                    requestHandler.addTask(username, title);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
             }
             dismiss();
         });
@@ -109,30 +111,11 @@ public class AddTask extends BottomSheetDialogFragment {
 
     @Override
     public void onDismiss(DialogInterface dialogInterface) {
+        super.onDismiss(dialogInterface);
         Activity activity = getActivity();
         if (activity instanceof dev.daly.todo_app.DialogInterface) {
             ((dev.daly.todo_app.DialogInterface) activity).handleDialogClose(dialogInterface);
         }
     }
-
-    public JsonObjectRequest addTask(String username, String title) throws JSONException {
-        String url = "http://192.168.1.17:8082/api/v1/users/" + username + "/tasks";
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("title", title);
-        return new JsonObjectRequest(Request.Method.POST, url, jsonObject, response -> {
-            Toast.makeText(getContext(), response.toString(), Toast.LENGTH_SHORT).show();
-            Log.d("Response", response.toString());
-        }, Throwable::printStackTrace);
-    }
-    public JsonObjectRequest updateTask(String username, String title) throws JSONException {
-        String url = "http://192.168.1.17:8082/api/v1/users/" + username + "/tasks/" + title.replaceAll(" ", "%20");
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("title", title);
-        return new JsonObjectRequest(Request.Method.PUT, url, jsonObject, response -> {
-            Toast.makeText(getContext(), response.toString(), Toast.LENGTH_SHORT).show();
-            Log.d("Response", response.toString());
-        }, Throwable::printStackTrace);
-    }
-
 
 }

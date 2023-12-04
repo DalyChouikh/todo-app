@@ -26,6 +26,7 @@ import java.util.List;
 import dev.daly.todo_app.AddTask;
 import dev.daly.todo_app.HomeActivity;
 import dev.daly.todo_app.R;
+import dev.daly.todo_app.RequestHandler;
 import dev.daly.todo_app.models.Status;
 import dev.daly.todo_app.models.Task;
 
@@ -34,8 +35,11 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     private List<Task> tasks;
     private final HomeActivity homeActivity;
 
+    private RequestHandler requestHandler;
+
     public TaskAdapter(HomeActivity homeActivity) {
         this.homeActivity = homeActivity;
+        requestHandler = new RequestHandler(homeActivity);
     }
 
 
@@ -59,7 +63,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             String username = homeActivity.getIntent().getStringExtra("username");
             try {
-                Volley.newRequestQueue(homeActivity).add(updateTask(username, task.getTitle(), isChecked ? Status.DONE : Status.IN_PROGRESS));
+                requestHandler.updateTask(username, task.getTitle(), isChecked ? Status.DONE : Status.IN_PROGRESS);
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
@@ -68,7 +72,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return tasks.size();
+        return tasks != null ? tasks.size() : 0;
     }
 
     public void setTasks(List<Task> tasks) {
@@ -80,7 +84,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         Task task = tasks.get(position);
         String username = homeActivity.getIntent().getStringExtra("username");
         String title = task.getTitle();
-        Volley.newRequestQueue(homeActivity).add(deleteTask(username, title));
+        requestHandler.deleteTask(username, title);
         tasks.remove(position);
         notifyItemRemoved(position);
     }
@@ -92,7 +96,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         bundle.putString("username", homeActivity.getIntent().getStringExtra("username"));
         AddTask addTask = new AddTask();
         addTask.setArguments(bundle);
-        addTask.show(homeActivity.getSupportFragmentManager(), AddTask.TAG);
+        addTask.show(homeActivity.getSupportFragmentManager(), addTask.getTag());
     }
 
     public Context getContext() {
@@ -111,22 +115,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     }
 
 
-    public JsonObjectRequest updateTask(String username, String title, Status status) throws JSONException {
-        String url = "http://192.168.1.17:8082/api/v1/users/" + username + "/tasks/" + title.replaceAll(" ", "%20");
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("title", title);
-        jsonObject.put("status", status.getStatus());
-        return new JsonObjectRequest(Request.Method.PUT, url, jsonObject, response -> {
-            Toast.makeText(homeActivity, response.toString(), Toast.LENGTH_SHORT).show();
-            Log.d("Response", response.toString());
-        }, Throwable::printStackTrace);
-    }
 
-    public JsonObjectRequest deleteTask(String username, String title) throws JSONException {
-        String url = "http://192.168.1.17:8082/api/v1/users/" + username + "/tasks/" + title.replaceAll(" ", "%20");
-        return new JsonObjectRequest(Request.Method.DELETE, url, null, response -> {
-            Toast.makeText(homeActivity, response.toString(), Toast.LENGTH_SHORT).show();
-            System.out.println(response.toString());
-        }, Throwable::printStackTrace);
-    }
+
+
 }

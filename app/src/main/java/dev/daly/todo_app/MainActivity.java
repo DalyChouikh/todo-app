@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.button.MaterialButton;
 
@@ -19,17 +20,11 @@ import org.json.JSONException;
 import dev.daly.todo_app.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
-
     ActivityMainBinding binding;
-
     EditText username, password, confirmPassword;
     MaterialButton registerBtn, loginBtn;
     DB db;
     RequestHandler requestHandler;
-
-    public static Context getContext() {
-        return getContext();
-    }
 
 
     @Override
@@ -37,14 +32,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        requestHandler = new RequestHandler(MainActivity.this);
         username = binding.username;
         password = binding.password;
         confirmPassword = binding.cPassword;
         registerBtn = binding.signUpBtn;
         loginBtn = binding.signInBtn;
         db = new DB(MainActivity.this);
-        requestHandler = new RequestHandler();
-
         registerBtn.setOnClickListener(v -> {
             String usernameStr = username.getText().toString();
             String passwordStr = password.getText().toString();
@@ -76,14 +70,13 @@ public class MainActivity extends AppCompatActivity {
                             Log.d("Request", "Sending request");
                             try {
                                 requestHandler.createUser(usernameStr, passwordStr);
-                                Volley.newRequestQueue(MainActivity.this).add(requestHandler.createUser(usernameStr, passwordStr));
+                                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                                intent.putExtra("username", usernameStr);
+                                startActivity(intent);
+                                finish();
                             } catch (JSONException e) {
                                 throw new RuntimeException(e);
                             }
-                            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                            intent.putExtra("username", usernameStr);
-                            startActivity(intent);
-                            finish();
                         } else {
                             Toast.makeText(MainActivity.this, "❌ Registration Failed", Toast.LENGTH_SHORT).show();
                         }
@@ -98,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
+            finish();
 
         });
     }
