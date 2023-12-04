@@ -19,4 +19,9 @@
     <string name="cancel">Annuler</string>
     <string name="confirm">Confirmer</string>
     <string name="app_name">TaskFlow</string>
+    <string name="menu_home">Acceuil</string>
+    <string name="menu_profile">Profile</string>
+    <string name="menu_settings">Paramètres</string>
+    <string name="menu_logout">Déconnexion</string>
+    <string name="menu_infos">Infos</string>
 </resources>
