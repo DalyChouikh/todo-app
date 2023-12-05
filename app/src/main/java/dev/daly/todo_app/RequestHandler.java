@@ -36,9 +36,6 @@ public class RequestHandler {
         requestQueue = Volley.newRequestQueue(context);
     }
 
-    public RequestHandler() {
-    }
-
     public void createUser(String username, String password) throws JSONException {
         JSONObject json = new JSONObject();
         json.put("username", username);
@@ -65,7 +62,6 @@ public class RequestHandler {
                     e.printStackTrace();
                 }
             }
-            Toast.makeText(context, response.toString(), Toast.LENGTH_SHORT).show();
             taskCallback.onCallback(tasks);
         }, Throwable::printStackTrace);
         requestQueue.add(jsonArrayRequest);
@@ -105,11 +101,11 @@ public class RequestHandler {
         requestQueue.add(jsonObjectRequest);
     }
 
-    public void deleteTask(String username, String title) throws JSONException {
+    public void deleteTask(String username, String title) {
         String url = URL + "/" + username + "/tasks/" + title.replaceAll(" ", "%20");
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, null, response -> {
             Toast.makeText(context, response.toString(), Toast.LENGTH_SHORT).show();
-            System.out.println(response.toString());
+            System.out.println(response);
         }, Throwable::printStackTrace);
         requestQueue.add(jsonObjectRequest);
     }

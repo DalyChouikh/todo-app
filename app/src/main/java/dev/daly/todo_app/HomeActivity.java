@@ -75,7 +75,7 @@ public class HomeActivity extends AppCompatActivity implements DialogInterface {
     @Override
     public void handleDialogClose(android.content.DialogInterface dialogInterface) {
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
             Intent intent = getIntent();
             String username = intent.getStringExtra("username");
             requestHandler.getUserTasks(username, tasks -> {
