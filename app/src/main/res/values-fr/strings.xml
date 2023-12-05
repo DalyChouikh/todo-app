@@ -24,4 +24,5 @@
     <string name="menu_settings">Paramètres</string>
     <string name="menu_logout">Déconnexion</string>
     <string name="menu_infos">Infos</string>
+    <string name="app_description">dev.daly.com</string>
 </resources>
