@@ -17,7 +17,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivitySplashBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        final Intent intent = new Intent(this, MainActivity.class);
+        final Intent intent = new Intent(this, LoginActivity.class);
         new Handler().postDelayed(() -> {
             startActivity(intent);
             finish();

@@ -58,11 +58,29 @@
         android:drawablePadding="15dp"
         android:textStyle="bold" />
 
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/rememberMe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/password"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="25dp"
+        android:fontFamily="@font/jetbrainsmono_bold"
+        android:text="@string/remember_me"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        />
+
+
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/signInBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/password"
+        android:layout_below="@id/rememberMe"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="25dp"
         android:backgroundTint="@color/design_default_color_secondary"

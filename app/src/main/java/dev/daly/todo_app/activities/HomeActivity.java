@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -89,6 +90,8 @@ public class HomeActivity extends AppCompatActivity implements DialogInterface {
         int navContactUs = R.id.navContactUs;
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             if(menuItem.getItemId() == navLogout){
+                SharedPreferences sharedPreferences = getSharedPreferences("rememberMe", MODE_PRIVATE);
+                sharedPreferences.edit().putBoolean("rememberMe", false).apply();
                 Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();

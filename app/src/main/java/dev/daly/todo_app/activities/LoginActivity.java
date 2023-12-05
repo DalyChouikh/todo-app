@@ -3,12 +3,15 @@ package dev.daly.todo_app.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.checkbox.MaterialCheckBox;
 
 import dev.daly.todo_app.db.DB;
 import dev.daly.todo_app.databinding.ActivityLoginBinding;
@@ -20,6 +23,8 @@ public class LoginActivity extends AppCompatActivity {
     MaterialButton loginBtn, registerBtn;
     DB db;
 
+    MaterialCheckBox rememberMe;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +35,24 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn = binding.signInBtn;
         registerBtn = binding.signUpBtn;
         db = new DB(LoginActivity.this);
+        rememberMe = binding.rememberMe;
+
+        SharedPreferences sharedPreferences = getSharedPreferences("rememberMe", MODE_PRIVATE);
+        if(sharedPreferences.getBoolean("rememberMe", false)){
+            SharedPreferences sharedPreferences1 = getSharedPreferences("username", MODE_PRIVATE);
+            String usernameStr = sharedPreferences1.getString("username", "");
+            if(!usernameStr.isEmpty()){
+                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                intent.putExtra("username", usernameStr);
+                startActivity(intent);
+                finish();
+            }
+        }else {
+            SharedPreferences sharedPreferences1 = getSharedPreferences("username", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences1.edit();
+            editor.clear();
+            editor.apply();
+        }
 
         loginBtn.setOnClickListener(v -> {
             String usernameStr = username.getText().toString();
@@ -48,6 +71,10 @@ public class LoginActivity extends AppCompatActivity {
             } else {
                 if (db.checkUsernamePassword(usernameStr, passwordStr)) {
                     Toast.makeText(LoginActivity.this, "✅ Login Successful", Toast.LENGTH_SHORT).show();
+                    SharedPreferences sharedPreferences1 = getSharedPreferences("username", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences1.edit();
+                    editor.putString("username", usernameStr);
+                    editor.apply();
                     Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                     intent.putExtra("username", usernameStr);
                     startActivity(intent);
@@ -62,6 +89,23 @@ public class LoginActivity extends AppCompatActivity {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
+        });
+        rememberMe.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(buttonView.isChecked()){
+                SharedPreferences sharedPreferences1 = getSharedPreferences("rememberMe", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences1.edit();
+                editor.putBoolean("rememberMe", true);
+                editor.apply();
+            }else {
+                SharedPreferences sharedPreferences1 = getSharedPreferences("rememberMe", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences1.edit();
+                editor.putBoolean("rememberMe", false);
+                editor.apply();
+                SharedPreferences sharedPreferences2 = getSharedPreferences("username", MODE_PRIVATE);
+                SharedPreferences.Editor editor1 = sharedPreferences2.edit();
+                editor1.clear();
+                editor1.apply();
+            }
         });
     }
 
