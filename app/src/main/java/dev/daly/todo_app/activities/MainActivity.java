@@ -1,22 +1,20 @@
-package dev.daly.todo_app;
+package dev.daly.todo_app.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONException;
 
+import dev.daly.todo_app.db.DB;
+import dev.daly.todo_app.RequestHandler;
 import dev.daly.todo_app.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {

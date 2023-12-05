@@ -1,4 +1,4 @@
-package dev.daly.todo_app;
+package dev.daly.todo_app.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 
+import dev.daly.todo_app.db.DB;
 import dev.daly.todo_app.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {

@@ -1,12 +1,10 @@
-package dev.daly.todo_app;
+package dev.daly.todo_app.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-
-import java.util.Objects;
 
 import dev.daly.todo_app.databinding.ActivitySplashBinding;
 

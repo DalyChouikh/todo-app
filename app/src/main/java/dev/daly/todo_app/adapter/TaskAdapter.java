@@ -1,30 +1,21 @@
 package dev.daly.todo_app.adapter;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.Request;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.lang.reflect.Method;
 import java.util.List;
 
 import dev.daly.todo_app.AddTask;
-import dev.daly.todo_app.HomeActivity;
+import dev.daly.todo_app.activities.HomeActivity;
 import dev.daly.todo_app.R;
 import dev.daly.todo_app.RequestHandler;
 import dev.daly.todo_app.models.Status;

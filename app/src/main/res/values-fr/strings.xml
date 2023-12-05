@@ -27,4 +27,6 @@
     <string name="app_description">dev.daly.com</string>
     <string name="open">Ouvrir Menu</string>
     <string name="close">Fermer menu</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="support">Support</string>
 </resources>

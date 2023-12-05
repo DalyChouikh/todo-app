@@ -6,7 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".HomeActivity">
+    tools:context=".activities.HomeActivity"
+    tools:openDrawer="start"
+    >
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navView"
@@ -14,6 +16,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/header"
+        app:itemTextColor="@color/white"
+        android:backgroundTint="@color/purple"
         app:menu="@menu/main_menu">
 
     </com.google.android.material.navigation.NavigationView>
@@ -22,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".HomeActivity">
+        tools:context=".activities.HomeActivity">
         <include
             android:id="@+id/toolbar"
             layout="@layout/toolbar" />

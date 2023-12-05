@@ -1,4 +1,4 @@
-package dev.daly.todo_app;
+package dev.daly.todo_app.db;
 
 import android.content.ContentValues;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package dev.daly.todo_app;
+package dev.daly.todo_app.activities;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,34 +8,23 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.ImageView;
-import android.widget.Toast;
-
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.toolbox.BaseHttpStack;
-import com.android.volley.toolbox.HttpStack;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
+import dev.daly.todo_app.AddTask;
+import dev.daly.todo_app.DialogInterface;
+import dev.daly.todo_app.R;
+import dev.daly.todo_app.RecyclerItemTouchHelper;
+import dev.daly.todo_app.RequestHandler;
 import dev.daly.todo_app.adapter.TaskAdapter;
 import dev.daly.todo_app.databinding.ActivityHomeBinding;
-import dev.daly.todo_app.databinding.ToolbarBinding;
 import dev.daly.todo_app.models.Task;
 
 public class HomeActivity extends AppCompatActivity implements DialogInterface {
@@ -89,10 +78,39 @@ public class HomeActivity extends AppCompatActivity implements DialogInterface {
         });
 
         /*----------------Setting up navigation drawer----------------*/
+        navigationView.bringToFront();
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+        int navLogout = R.id.navLogout;
+        int navSettings = R.id.navSettings;
+        int navProfile = R.id.navProfile;
+        int navContactUs = R.id.navContactUs;
+        navigationView.setNavigationItemSelectedListener(menuItem -> {
+            if(menuItem.getItemId() == navLogout){
+                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+            if(menuItem.getItemId() == navSettings){
+                Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
+                startActivity(intent);
+                finish();
+            }
+            if(menuItem.getItemId() == navProfile){
+                Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
+                intent.putExtra("username", getIntent().getStringExtra("username"));
+                startActivity(intent);
+                finish();
+            }
+            if(menuItem.getItemId() == navContactUs){
+                Intent intent = new Intent(HomeActivity.this, ContactUsActivity.class);
+                startActivity(intent);
+                finish();
+            }
+            return true;
+        });
 
 
     }
@@ -111,5 +129,14 @@ public class HomeActivity extends AppCompatActivity implements DialogInterface {
         } catch (JSONException | InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(drawerLayout.isDrawerOpen(navigationView)){
+            drawerLayout.closeDrawer(navigationView);
+            return;
+        }else
+            super.onBackPressed();
     }
 }
