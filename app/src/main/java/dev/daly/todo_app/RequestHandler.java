@@ -24,7 +24,7 @@ import dev.daly.todo_app.models.Task;
 
 public class RequestHandler {
 
-    private final String ADDRESS = "192.168.56.122";
+    public static String ADDRESS;
     private final String URL = "http://" + ADDRESS + ":8082/api/v1/users";
 
     private Context context;
@@ -34,6 +34,10 @@ public class RequestHandler {
     public RequestHandler(Context context) {
         this.context = context;
         requestQueue = Volley.newRequestQueue(context);
+    }
+
+    public static void setAddressIP(String addressIP) {
+        ADDRESS = addressIP;
     }
 
     public void createUser(String username, String password) throws JSONException {

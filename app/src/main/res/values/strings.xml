@@ -29,4 +29,6 @@
     <string name="contact_us">Contact Us</string>
     <string name="support">Support</string>
     <string name="remember_me">Remember me</string>
+    <string name="address_ip">Address IP</string>
+    <string name="set">Set</string>
 </resources>

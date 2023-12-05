@@ -44,7 +44,6 @@ public class AddTask extends BottomSheetDialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle savedInstanceState) {
-        //        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         return layoutInflater.inflate(R.layout.new_task, viewGroup, false);
     }
 

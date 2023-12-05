@@ -30,4 +30,6 @@
     <string name="contact_us">Contacter nous</string>
     <string name="support">Supporte</string>
     <string name="remember_me">Souviens moi</string>
+    <string name="address_ip">Address IP</string>
+    <string name="set">Set</string>
 </resources>
