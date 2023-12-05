@@ -34,7 +34,6 @@ public class HomeActivity extends AppCompatActivity implements DialogInterface {
     public RequestHandler requestHandler;
     private RecyclerView recyclerView;
     private TaskAdapter taskAdapter;
-    private List<Task> tasks;
     private FloatingActionButton addTaskButton;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -51,7 +50,6 @@ public class HomeActivity extends AppCompatActivity implements DialogInterface {
         drawerLayout = binding.drawerLayout;
         navigationView = binding.navView;
         toolbar = binding.toolbar.getRoot();
-        tasks = new ArrayList<>();
         addTaskButton = binding.addTaskButton;
         requestHandler = new RequestHandler(this);
         recyclerView = binding.tasksRecyclerView;
