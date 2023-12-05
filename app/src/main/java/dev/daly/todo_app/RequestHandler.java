@@ -36,9 +36,6 @@ public class RequestHandler {
         requestQueue = Volley.newRequestQueue(context);
     }
 
-    public static void setAddressIP(String addressIP) {
-        ADDRESS = addressIP;
-    }
 
     public void createUser(String username, String password) throws JSONException {
         JSONObject json = new JSONObject();
@@ -109,6 +106,26 @@ public class RequestHandler {
         String url = URL + "/" + username + "/tasks/" + title.replaceAll(" ", "%20");
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, null, response -> {
             Toast.makeText(context, response.toString(), Toast.LENGTH_SHORT).show();
+            System.out.println(response);
+        }, Throwable::printStackTrace);
+        requestQueue.add(jsonObjectRequest);
+    }
+
+    public void deleteUser(String username) {
+        String url = URL + "/" + username;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, null, response -> {
+            Toast.makeText(context, "✅ Account deleted successfully", Toast.LENGTH_SHORT).show();
+            System.out.println(response);
+        }, Throwable::printStackTrace);
+        requestQueue.add(jsonObjectRequest);
+    }
+
+    public void changeUsername(String username, String newUsername) throws JSONException {
+        String url = URL + "/" + username;
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("username", newUsername);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, jsonObject, response -> {
+            Toast.makeText(context, "✅ Username updated successfully", Toast.LENGTH_SHORT).show();
             System.out.println(response);
         }, Throwable::printStackTrace);
         requestQueue.add(jsonObjectRequest);

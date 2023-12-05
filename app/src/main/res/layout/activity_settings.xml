@@ -4,11 +4,25 @@
     android:background="@color/white"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/addressIPTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="@string/set_up_ip"
+        android:fontFamily="@font/jetbrainsmono_bold"
+        android:textColor="@color/purple"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        />
+
     <EditText
         android:id="@+id/addressIPEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_margin="10dp"
+        android:layout_below="@id/addressIPTextView"
         android:autofillHints="task title"
         android:background="@drawable/edit_text"
         android:fontFamily="@font/jetbrainsmono_bold"
@@ -29,6 +43,19 @@
         android:text="@string/set"
         android:textAllCaps="false"
         android:textColor="@color/darker_gray"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        />
+    <Button
+        android:id="@+id/cancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/addressIPSaveButton"
+        android:layout_alignParentEnd="true"
+        android:background="@android:color/transparent"
+        android:text="@string/cancel"
+        android:textAllCaps="false"
+        android:textColor="@color/purple"
         android:textSize="16sp"
         android:textStyle="bold"
         />

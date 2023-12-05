@@ -19,23 +19,19 @@ public class SettingsActivity extends AppCompatActivity {
 
     EditText addressIPEditText;
     Button addressIPSaveButton;
+    Button cancelButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivitySettingsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        cancelButton = binding.cancelButton;
         addressIPEditText = binding.addressIPEditText;
         addressIPSaveButton = binding.addressIPSaveButton;
         addressIPSaveButton.setOnClickListener(v -> {
             String addressIP = addressIPEditText.getText().toString();
-            int count = 0;
-            for (int i = 0; i < addressIP.length(); i++) {
-                if (addressIP.charAt(i) == '.') {
-                    count++;
-                }
-            }
-            if (addressIPEditText.getText().toString().isEmpty() ||  count != 3) {
+            if (addressIP.split("\\.").length != 4) {
                 addressIPEditText.setError("Invalid IP Address");
             } else {
                 getSharedPreferences("addressIP", MODE_PRIVATE).edit().putString("addressIP", addressIP).apply();
@@ -47,8 +43,15 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        cancelButton.setOnClickListener(v -> {
+            Intent intent = new Intent(SettingsActivity.this, HomeActivity.class);
+            intent.putExtra("username", getIntent().getStringExtra("username"));
+            startActivity(intent);
+            finish();
+        });
+
         addressIPEditText.setText(RequestHandler.ADDRESS);
-        addressIPEditText.addTextChangedListener(new TextWatcher(){
+        addressIPEditText.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -77,4 +80,13 @@ public class SettingsActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(SettingsActivity.this, HomeActivity.class);
+        intent.putExtra("username", getIntent().getStringExtra("username"));
+        startActivity(intent);
+        finish();
+
+        super.onBackPressed();
+    }
 }

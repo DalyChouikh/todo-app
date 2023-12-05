@@ -30,6 +30,9 @@
     <string name="contact_us">Contacter nous</string>
     <string name="support">Supporte</string>
     <string name="remember_me">Souviens moi</string>
-    <string name="address_ip">Address IP</string>
-    <string name="set">Set</string>
+    <string name="address_ip">Addresse IP</string>
+    <string name="set">Modifier</string>
+    <string name="set_up_ip">Modifier le IP du serveur</string>
+    <string name="change_username">Changer nom d\'utilisateur</string>
+    <string name="delete">Supprimer compte</string>
 </resources>

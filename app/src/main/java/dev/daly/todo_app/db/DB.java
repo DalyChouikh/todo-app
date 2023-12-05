@@ -6,8 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import androidx.annotation.Nullable;
-
 public class DB extends SQLiteOpenHelper {
 
     public DB(Context context) {
@@ -44,6 +42,18 @@ public class DB extends SQLiteOpenHelper {
         SQLiteDatabase myDB = this.getWritableDatabase();
         Cursor cursor = myDB.rawQuery("SELECT * FROM users WHERE username=? AND password=?", new String[]{username, password});
         return cursor.getCount() > 0;
+    }
+
+    public void deleteUser(String username){
+        SQLiteDatabase myDB = this.getWritableDatabase();
+        myDB.delete("users", "username=?", new String[]{username});
+    }
+
+    public void updateUser(String oldUsername, String username){
+        SQLiteDatabase myDB = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("username", username);
+        myDB.update("users", contentValues, "username=?", new String[]{oldUsername});
     }
 
 

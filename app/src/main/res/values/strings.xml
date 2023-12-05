@@ -31,4 +31,7 @@
     <string name="remember_me">Remember me</string>
     <string name="address_ip">Address IP</string>
     <string name="set">Set</string>
+    <string name="set_up_ip">Set up the Server IP</string>
+    <string name="change_username">Change username</string>
+    <string name="delete">Delete account</string>
 </resources>
