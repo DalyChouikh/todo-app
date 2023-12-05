@@ -97,12 +97,4 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
         icon.draw(canvas);
 
     }
-
-    public JsonObjectRequest deleteTask(String username, String title) throws JSONException {
-        String url = "http://172.21.192.1:8082/api/v1/users/" + username + "/tasks/" + title.replaceAll(" ", "%20");
-        return new JsonObjectRequest(Request.Method.DELETE, url, null, response -> {
-            Toast.makeText(taskAdapter.getContext(), response.toString(), Toast.LENGTH_SHORT).show();
-            System.out.println(response.toString());
-        }, Throwable::printStackTrace);
-    }
 }

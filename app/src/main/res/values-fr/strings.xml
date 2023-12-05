@@ -25,4 +25,6 @@
     <string name="menu_logout">Déconnexion</string>
     <string name="menu_infos">Infos</string>
     <string name="app_description">dev.daly.com</string>
+    <string name="open">Ouvrir Menu</string>
+    <string name="close">Fermer menu</string>
 </resources>

@@ -24,4 +24,6 @@
     <string name="menu_logout">Logout</string>
     <string name="menu_infos">Infos</string>
     <string name="app_description">dev.daly.com</string>
+    <string name="open">Open Menu</string>
+    <string name="close">Close menu</string>
 </resources>

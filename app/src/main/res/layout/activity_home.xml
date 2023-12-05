@@ -1,52 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:fitsSystemWindows="true"
     tools:context=".HomeActivity">
 
-    <TextView
-        android:id="@+id/tasksTextView"
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:gravity="center"
-        android:fontFamily="@font/jetbrainsmono_bold"
-        android:text="@string/app_name"
-        android:textColor="@color/purple"
-        android:textSize="35sp"
-        android:textStyle="bold"
-        app:drawableStartCompat="@drawable/baseline_checklist_24"
-        android:drawablePadding="15dp"
-        />
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/header"
+        app:menu="@menu/main_menu">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/tasksRecyclerView"
+    </com.google.android.material.navigation.NavigationView>
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tasksTextView"
-        android:layout_margin="20dp"
-        android:nestedScrollingEnabled="true"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/task_layout" />
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context=".HomeActivity">
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addTaskButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="25dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="249dp"
-        android:layout_marginBottom="237dp"
-        android:clickable="true"
-        app:backgroundTint="@color/purple"
-        android:contentDescription="@string/fb_add_task"
-        android:src="@drawable/add_fill0_wght400_grad0_opsz24"
-        app:fabSize="normal"
-        android:focusable="true" />
-</RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/tasksRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/toolbar"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:nestedScrollingEnabled="true"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/task_layout" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addTaskButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="25dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="249dp"
+            android:layout_marginBottom="237dp"
+            android:clickable="true"
+            android:contentDescription="@string/fb_add_task"
+            android:focusable="true"
+            android:src="@drawable/add_fill0_wght400_grad0_opsz24"
+            app:backgroundTint="@color/purple"
+            app:fabSize="normal" />
+    </RelativeLayout>
+</androidx.drawerlayout.widget.DrawerLayout>
