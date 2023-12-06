@@ -1,11 +1,17 @@
 package dev.daly.todo_app;
 
 
+import static androidx.core.content.ContextCompat.startActivity;
+
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
@@ -15,10 +21,13 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import dev.daly.todo_app.activities.LoginActivity;
+import dev.daly.todo_app.activities.SplashActivity;
 import dev.daly.todo_app.models.Status;
 import dev.daly.todo_app.models.Task;
 
@@ -65,6 +74,25 @@ public class RequestHandler {
             }
             taskCallback.onCallback(tasks);
         }, Throwable::printStackTrace);
+        requestQueue.add(jsonArrayRequest);
+    }
+
+    public void getUsers(String address, SplashActivity activity) {
+        String URL = "http://" + address + ":8082/api/v1/users";
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, URL, null, response -> {
+            Log.d("Users response", response.toString());
+            activity.runOnUiThread(() -> {
+                Toast.makeText(context, "✅ Connected to server", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, LoginActivity.class);
+                context.startActivity(intent);
+                activity.finish();
+            });
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                Toast.makeText(context, "❌ Bad IP address", Toast.LENGTH_SHORT).show();
+                showAddressIPSetter((SplashActivity) context);
+            }
+        });
         requestQueue.add(jsonArrayRequest);
     }
 
@@ -133,6 +161,11 @@ public class RequestHandler {
 
     public interface TaskCallback {
         void onCallback(List<Task> tasks);
+    }
+
+    public void showAddressIPSetter(SplashActivity splashActivity) {
+        AddressIPSetter addressIPSetter = AddressIPSetter.newInstance();
+        addressIPSetter.show(splashActivity.getSupportFragmentManager(), AddressIPSetter.TAG);
     }
 
 }

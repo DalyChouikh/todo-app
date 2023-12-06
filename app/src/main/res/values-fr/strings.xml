@@ -35,4 +35,6 @@
     <string name="set_up_ip">Modifier le IP du serveur</string>
     <string name="change_username">Changer nom d\'utilisateur</string>
     <string name="delete">Supprimer compte</string>
+    <string name="negative_choice">Negative Choice</string>
+    <string name="positive_choice">Positive choice</string>
 </resources>

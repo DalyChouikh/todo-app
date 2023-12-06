@@ -1,8 +1,10 @@
 package dev.daly.todo_app.activities;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +15,7 @@ import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONException;
 
+import dev.daly.todo_app.R;
 import dev.daly.todo_app.db.DB;
 import dev.daly.todo_app.RequestHandler;
 import dev.daly.todo_app.databinding.ActivityMainBinding;
@@ -61,15 +64,16 @@ public class MainActivity extends AppCompatActivity {
                         username.setError("Username already exists");
                     } else {
                         if (db.insertUser(usernameStr, passwordStr)) {
-                            Toast.makeText(MainActivity.this, "✅ User registered Successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "✅ Account registred Successfully", Toast.LENGTH_SHORT).show();
                             username.setText("");
                             password.setText("");
                             confirmPassword.setText("");
                             Log.d("Request", "Sending request");
                             try {
                                 requestHandler.createUser(usernameStr, passwordStr);
-                                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                                 intent.putExtra("username", usernameStr);
+                                intent.putExtra("password", passwordStr);
                                 startActivity(intent);
                                 finish();
                             } catch (JSONException e) {

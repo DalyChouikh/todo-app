@@ -34,4 +34,6 @@
     <string name="set_up_ip">Set up the Server IP</string>
     <string name="change_username">Change username</string>
     <string name="delete">Delete account</string>
+    <string name="negative_choice">Negative Choice</string>
+    <string name="positive_choice">Positive choice</string>
 </resources>

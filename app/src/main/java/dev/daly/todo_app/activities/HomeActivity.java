@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
@@ -87,26 +88,26 @@ public class HomeActivity extends AppCompatActivity implements DialogInterface {
         int navProfile = R.id.navProfile;
         int navContactUs = R.id.navContactUs;
         navigationView.setNavigationItemSelectedListener(menuItem -> {
-            if(menuItem.getItemId() == navLogout){
+            if (menuItem.getItemId() == navLogout) {
                 SharedPreferences sharedPreferences = getSharedPreferences("rememberMe", MODE_PRIVATE);
                 sharedPreferences.edit().putBoolean("rememberMe", false).apply();
                 Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
             }
-            if(menuItem.getItemId() == navSettings){
+            if (menuItem.getItemId() == navSettings) {
                 Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
                 intent.putExtra("username", getIntent().getStringExtra("username"));
                 startActivity(intent);
                 finish();
             }
-            if(menuItem.getItemId() == navProfile){
+            if (menuItem.getItemId() == navProfile) {
                 Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
                 intent.putExtra("username", getIntent().getStringExtra("username"));
                 startActivity(intent);
                 finish();
             }
-            if(menuItem.getItemId() == navContactUs){
+            if (menuItem.getItemId() == navContactUs) {
                 Intent intent = new Intent(HomeActivity.this, ContactUsActivity.class);
                 startActivity(intent);
                 finish();
@@ -120,7 +121,7 @@ public class HomeActivity extends AppCompatActivity implements DialogInterface {
     @Override
     public void handleDialogClose(android.content.DialogInterface dialogInterface) {
         try {
-            Thread.sleep(500);
+            Thread.sleep(800);
             Intent intent = getIntent();
             String username = intent.getStringExtra("username");
             requestHandler.getUserTasks(username, tasks -> {
@@ -135,10 +136,27 @@ public class HomeActivity extends AppCompatActivity implements DialogInterface {
 
     @Override
     public void onBackPressed() {
-        if(drawerLayout.isDrawerOpen(navigationView)){
+        if (drawerLayout.isDrawerOpen(navigationView)) {
             drawerLayout.closeDrawer(navigationView);
             return;
-        }else
+        } else
             super.onBackPressed();
+    }
+
+    @Override
+    public void onStart() {
+        try {
+            Thread.sleep(800);
+            Intent intent = getIntent();
+            String username = intent.getStringExtra("username");
+            requestHandler.getUserTasks(username, tasks -> {
+                System.out.println(tasks.toString());
+                taskAdapter.setTasks(tasks);
+                taskAdapter.notifyDataSetChanged();
+            });
+        } catch (JSONException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        super.onStart();
     }
 }

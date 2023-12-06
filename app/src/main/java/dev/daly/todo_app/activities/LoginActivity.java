@@ -107,6 +107,12 @@ public class LoginActivity extends AppCompatActivity {
                 editor1.apply();
             }
         });
+        String usernameStr = getIntent().getStringExtra("username");
+        String passwordStr = getIntent().getStringExtra("password");
+        if(usernameStr != null && passwordStr != null){
+            username.setText(usernameStr);
+            password.setText(passwordStr);
+        }
     }
 
     boolean isConnected() {
