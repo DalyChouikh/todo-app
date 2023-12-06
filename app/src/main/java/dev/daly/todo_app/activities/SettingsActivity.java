@@ -8,6 +8,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import dev.daly.todo_app.R;
 import dev.daly.todo_app.RequestHandler;
@@ -16,7 +17,7 @@ import dev.daly.todo_app.databinding.ActivitySettingsBinding;
 public class SettingsActivity extends AppCompatActivity {
 
     ActivitySettingsBinding binding;
-
+    TextView goBack;
     EditText addressIPEditText;
     Button addressIPSaveButton;
     Button cancelButton;
@@ -29,6 +30,7 @@ public class SettingsActivity extends AppCompatActivity {
         cancelButton = binding.cancelButton;
         addressIPEditText = binding.addressIPEditText;
         addressIPSaveButton = binding.addressIPSaveButton;
+        goBack = binding.addressIPTextView;
         addressIPSaveButton.setOnClickListener(v -> {
             String addressIP = addressIPEditText.getText().toString();
             if (addressIP.split("\\.").length != 4) {
@@ -77,6 +79,12 @@ public class SettingsActivity extends AppCompatActivity {
                     addressIPSaveButton.setTextColor(getResources().getColor(R.color.purple));
                 }
             }
+        });
+        goBack.setOnClickListener(v -> {
+            Intent intent = new Intent(SettingsActivity.this, HomeActivity.class);
+            intent.putExtra("username", getIntent().getStringExtra("username"));
+            startActivity(intent);
+            finish();
         });
 
     }

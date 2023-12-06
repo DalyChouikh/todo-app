@@ -2,6 +2,7 @@ package dev.daly.todo_app.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import org.json.JSONException;
 
@@ -25,6 +27,7 @@ public class ProfileActivity extends AppCompatActivity {
     Button cancelButton;
     Button deleteButton;
     RequestHandler requestHandler;
+    TextView goBack;
 
     DB db;
 
@@ -37,6 +40,7 @@ public class ProfileActivity extends AppCompatActivity {
         saveButton = binding.saveButton;
         cancelButton = binding.cancelButton;
         deleteButton = binding.deleteButton;
+        goBack = binding.usernameTextView;
         db = new DB(ProfileActivity.this);
         requestHandler = new RequestHandler(ProfileActivity.this);
         usernameEditText.setText(getIntent().getStringExtra("username"));
@@ -49,28 +53,38 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         deleteButton.setOnClickListener(v -> {
-            db.deleteUser(getIntent().getStringExtra("username"));
-            requestHandler.deleteUser(getIntent().getStringExtra("username"));
-            SharedPreferences sharedPreferences = getSharedPreferences("rememberMe", MODE_PRIVATE);
-            SharedPreferences sharedPreferences1 = getSharedPreferences("username", MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            SharedPreferences.Editor editor1 = sharedPreferences1.edit();
-            editor.clear();
-            editor.apply();
-            editor1.clear();
-            editor1.apply();
-            Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
-            startActivity(intent);
-            finish();
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Delete account");
+            builder.setMessage("Are you sure you want to delete this account?");
+            builder.setPositiveButton(R.string.confirm, (dialog, which) -> {
+                db.deleteUser(getIntent().getStringExtra("username"));
+                requestHandler.deleteUser(getIntent().getStringExtra("username"));
+                SharedPreferences sharedPreferences = getSharedPreferences("rememberMe", MODE_PRIVATE);
+                SharedPreferences sharedPreferences1 = getSharedPreferences("username", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                SharedPreferences.Editor editor1 = sharedPreferences1.edit();
+                editor.clear();
+                editor.apply();
+                editor1.clear();
+                editor1.apply();
+                Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            });
+            builder.setNegativeButton(R.string.cancel, (dialog, which) -> {
+                dialog.dismiss();
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
         });
 
         saveButton.setOnClickListener(v -> {
             String username = usernameEditText.getText().toString();
-            if(username.isEmpty()){
+            if (username.isEmpty()) {
                 usernameEditText.setError("Username cannot be empty");
-            }  else {
+            } else {
                 String oldUsername = getIntent().getStringExtra("username");
-                if(!oldUsername.equals(username) && db.checkUsername(username)){
+                if (!oldUsername.equals(username) && db.checkUsername(username)) {
                     usernameEditText.setError("Username already exists");
                     return;
                 }
@@ -117,6 +131,12 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
         db.close();
+        goBack.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, HomeActivity.class);
+            intent.putExtra("username", getIntent().getStringExtra("username"));
+            startActivity(intent);
+            finish();
+        });
     }
 
     @Override

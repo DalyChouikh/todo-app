@@ -109,6 +109,7 @@ public class HomeActivity extends AppCompatActivity implements DialogInterface {
             }
             if (menuItem.getItemId() == navContactUs) {
                 Intent intent = new Intent(HomeActivity.this, ContactUsActivity.class);
+                intent.putExtra("username", getIntent().getStringExtra("username"));
                 startActivity(intent);
                 finish();
             }
