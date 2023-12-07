@@ -17,6 +17,7 @@ import dev.daly.todo_app.databinding.ActivitySettingsBinding;
 public class SettingsActivity extends AppCompatActivity {
 
     ActivitySettingsBinding binding;
+    RequestHandler requestHandler;
     TextView goBack;
     EditText addressIPEditText;
     Button addressIPSaveButton;
@@ -31,18 +32,10 @@ public class SettingsActivity extends AppCompatActivity {
         addressIPEditText = binding.addressIPEditText;
         addressIPSaveButton = binding.addressIPSaveButton;
         goBack = binding.addressIPTextView;
+        requestHandler = new RequestHandler(this);
         addressIPSaveButton.setOnClickListener(v -> {
             String addressIP = addressIPEditText.getText().toString();
-            if (addressIP.split("\\.").length != 4) {
-                addressIPEditText.setError("Invalid IP Address");
-            } else {
-                getSharedPreferences("addressIP", MODE_PRIVATE).edit().putString("addressIP", addressIP).apply();
-                RequestHandler.ADDRESS = addressIP;
-                Intent intent = new Intent(SettingsActivity.this, HomeActivity.class);
-                intent.putExtra("username", getIntent().getStringExtra("username"));
-                startActivity(intent);
-                finish();
-            }
+            requestHandler.getUsers(addressIP, this);
         });
 
         cancelButton.setOnClickListener(v -> {

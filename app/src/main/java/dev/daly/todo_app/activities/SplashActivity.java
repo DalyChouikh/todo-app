@@ -37,7 +37,6 @@ public class SplashActivity extends AppCompatActivity implements DialogInterface
         if (addressIP.isEmpty()) {
             requestHandler.showAddressIPSetter(this);
         } else {
-            RequestHandler.ADDRESS = addressIP;
             Log.d("Try", "Not Here");
             requestHandler.getUsers(addressIP, this);
         }

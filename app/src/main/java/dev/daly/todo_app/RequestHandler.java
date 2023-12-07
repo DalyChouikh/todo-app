@@ -1,6 +1,7 @@
 package dev.daly.todo_app;
 
 
+import static android.content.Context.MODE_PRIVATE;
 import static androidx.core.content.ContextCompat.startActivity;
 
 import android.app.Activity;
@@ -26,7 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import dev.daly.todo_app.activities.HomeActivity;
 import dev.daly.todo_app.activities.LoginActivity;
+import dev.daly.todo_app.activities.SettingsActivity;
 import dev.daly.todo_app.activities.SplashActivity;
 import dev.daly.todo_app.models.Status;
 import dev.daly.todo_app.models.Task;
@@ -82,6 +85,7 @@ public class RequestHandler {
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, URL, null, response -> {
             Log.d("Users response", response.toString());
             activity.runOnUiThread(() -> {
+                ADDRESS = address;
                 Toast.makeText(context, "✅ Connected to server", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(context, LoginActivity.class);
                 context.startActivity(intent);
@@ -91,6 +95,26 @@ public class RequestHandler {
             if (error instanceof NoConnectionError) {
                 Toast.makeText(context, "❌ Bad IP address", Toast.LENGTH_SHORT).show();
                 showAddressIPSetter((SplashActivity) context);
+            }
+        });
+        requestQueue.add(jsonArrayRequest);
+    }
+    public void getUsers(String address, SettingsActivity activity) {
+        String URL = "http://" + address + ":8082/api/v1/users";
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, URL, null, response -> {
+            Log.d("Users response", response.toString());
+            activity.runOnUiThread(() -> {
+                ADDRESS = address;
+                Toast.makeText(context, "✅ Connected to server", Toast.LENGTH_SHORT).show();
+                context.getSharedPreferences("addressIP", MODE_PRIVATE).edit().putString("addressIP", address).apply();
+                Intent intent = new Intent(context, HomeActivity.class);
+                intent.putExtra("username", activity.getIntent().getStringExtra("username"));
+                context.startActivity(intent);
+                activity.finish();
+            });
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                Toast.makeText(context, "❌ Bad IP address", Toast.LENGTH_SHORT).show();
             }
         });
         requestQueue.add(jsonArrayRequest);
