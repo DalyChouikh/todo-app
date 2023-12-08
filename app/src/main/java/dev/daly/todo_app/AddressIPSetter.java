@@ -25,6 +25,8 @@ public class AddressIPSetter extends BottomSheetDialogFragment {
     private EditText addressIPEditText;
     private Button addressIPSaveButton;
 
+    private RequestHandler requestHandler;
+
 
     public static AddressIPSetter newInstance() {
         return new AddressIPSetter();
@@ -46,6 +48,7 @@ public class AddressIPSetter extends BottomSheetDialogFragment {
         super.onViewCreated(view, savedInstanceState);
         addressIPEditText =  view.findViewById(R.id.addressIPEditText);
         addressIPSaveButton = view.findViewById(R.id.addressIPSaveButton);
+        requestHandler = new RequestHandler(getContext());
             if (!addressIPEditText.getText().toString().isEmpty()) {
                 addressIPSaveButton.setTextColor(getResources().getColor(R.color.purple));
             } else {
@@ -75,15 +78,9 @@ public class AddressIPSetter extends BottomSheetDialogFragment {
              String addressIP = addressIPEditText.getText().toString();
                 if(addressIP.isEmpty()){
                     addressIPEditText.setError("Address IP cannot be empty");
-                    return;
                 } else {
-                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("addressIP", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("addressIP", addressIP);
-                    editor.apply();
-                    RequestHandler.ADDRESS = addressIP;
+                    requestHandler.getUsers(addressIP, getActivity());
                 }
-            dismiss();
         });
     }
     @Override

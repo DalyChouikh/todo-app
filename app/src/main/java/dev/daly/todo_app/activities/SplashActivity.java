@@ -45,10 +45,6 @@ public class SplashActivity extends AppCompatActivity implements DialogInterface
 
     @Override
     public void handleDialogClose(android.content.DialogInterface dialogInterface) {
-        final Intent intent = new Intent(this, LoginActivity.class);
-        new Handler().postDelayed(() -> {
-            startActivity(intent);
-            finish();
-        }, 1000);
+        requestHandler.getUsers(RequestHandler.ADDRESS, this);
     }
 }

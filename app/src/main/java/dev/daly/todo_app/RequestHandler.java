@@ -12,6 +12,8 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.fragment.app.FragmentActivity;
+
 import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -92,13 +94,13 @@ public class RequestHandler {
                 activity.finish();
             });
         }, error -> {
-            if (error instanceof NoConnectionError) {
-                Toast.makeText(context, "❌ Bad IP address", Toast.LENGTH_SHORT).show();
-                showAddressIPSetter((SplashActivity) context);
-            }
+            Toast.makeText(context, "❌ Bad IP address", Toast.LENGTH_SHORT).show();
+            showAddressIPSetter((SplashActivity) context);
+
         });
         requestQueue.add(jsonArrayRequest);
     }
+
     public void getUsers(String address, SettingsActivity activity) {
         String URL = "http://" + address + ":8082/api/v1/users";
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, URL, null, response -> {
@@ -116,6 +118,27 @@ public class RequestHandler {
             if (error instanceof NoConnectionError) {
                 Toast.makeText(context, "❌ Bad IP address", Toast.LENGTH_SHORT).show();
             }
+        });
+        requestQueue.add(jsonArrayRequest);
+    }
+
+    public void getUsers(String address, FragmentActivity activity) {
+        String URL = "http://" + address + ":8082/api/v1/users";
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, URL, null, response -> {
+            Log.d("Users response", response.toString());
+            activity.runOnUiThread(() -> {
+                ADDRESS = address;
+                Toast.makeText(context, "✅ Connected to server", Toast.LENGTH_SHORT).show();
+                context.getSharedPreferences("addressIP", MODE_PRIVATE).edit().putString("addressIP", address).apply();
+                Intent intent = new Intent(context, HomeActivity.class);
+                intent.putExtra("username", activity.getIntent().getStringExtra("username"));
+                context.startActivity(intent);
+                activity.finish();
+            });
+        }, error -> {
+            Toast.makeText(context, "❌ Bad IP address", Toast.LENGTH_SHORT).show();
+            AddressIPSetter addressIPSetter = AddressIPSetter.newInstance();
+            addressIPSetter.show(activity.getSupportFragmentManager(), AddressIPSetter.TAG);
         });
         requestQueue.add(jsonArrayRequest);
     }
