@@ -58,6 +58,9 @@ Launch the app.
 
 * This project was developed as part of a university assignment to demonstrate proficiency in Android app development. It serves as a practical implementation of concepts learned during the course.
 
+## App Logo
+* ![App Logo](https://github.com/DalyChouikh/todo-app/blob/main/app/src/main/icon_app-playstore.png)
+
 ## Contributors
 
 * [Daly Chouikh](https://www.github.com/DalyChouikh)
