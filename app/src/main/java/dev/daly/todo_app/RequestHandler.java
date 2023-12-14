@@ -1,11 +1,20 @@
 package dev.daly.todo_app;
 
 
+import static android.content.Context.MODE_PRIVATE;
+import static androidx.core.content.ContextCompat.startActivity;
+
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.fragment.app.FragmentActivity;
+
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
@@ -15,16 +24,21 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import dev.daly.todo_app.activities.HomeActivity;
+import dev.daly.todo_app.activities.LoginActivity;
+import dev.daly.todo_app.activities.SettingsActivity;
+import dev.daly.todo_app.activities.SplashActivity;
 import dev.daly.todo_app.models.Status;
 import dev.daly.todo_app.models.Task;
 
 public class RequestHandler {
 
-    private final String ADDRESS = "192.168.56.122";
+    public static String ADDRESS;
     private final String URL = "http://" + ADDRESS + ":8082/api/v1/users";
 
     private Context context;
@@ -35,6 +49,7 @@ public class RequestHandler {
         this.context = context;
         requestQueue = Volley.newRequestQueue(context);
     }
+
 
     public void createUser(String username, String password) throws JSONException {
         JSONObject json = new JSONObject();
@@ -64,6 +79,67 @@ public class RequestHandler {
             }
             taskCallback.onCallback(tasks);
         }, Throwable::printStackTrace);
+        requestQueue.add(jsonArrayRequest);
+    }
+
+    public void getUsers(String address, SplashActivity activity) {
+        String URL = "http://" + address + ":8082/api/v1/users";
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, URL, null, response -> {
+            Log.d("Users response", response.toString());
+            activity.runOnUiThread(() -> {
+                ADDRESS = address;
+                Toast.makeText(context, "✅ Connected to server", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, LoginActivity.class);
+                context.startActivity(intent);
+                activity.finish();
+            });
+        }, error -> {
+            Toast.makeText(context, "❌ Bad IP address", Toast.LENGTH_SHORT).show();
+            showAddressIPSetter((SplashActivity) context);
+
+        });
+        requestQueue.add(jsonArrayRequest);
+    }
+
+    public void getUsers(String address, SettingsActivity activity) {
+        String URL = "http://" + address + ":8082/api/v1/users";
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, URL, null, response -> {
+            Log.d("Users response", response.toString());
+            activity.runOnUiThread(() -> {
+                ADDRESS = address;
+                Toast.makeText(context, "✅ Connected to server", Toast.LENGTH_SHORT).show();
+                context.getSharedPreferences("addressIP", MODE_PRIVATE).edit().putString("addressIP", address).apply();
+                Intent intent = new Intent(context, HomeActivity.class);
+                intent.putExtra("username", activity.getIntent().getStringExtra("username"));
+                context.startActivity(intent);
+                activity.finish();
+            });
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                Toast.makeText(context, "❌ Bad IP address", Toast.LENGTH_SHORT).show();
+            }
+        });
+        requestQueue.add(jsonArrayRequest);
+    }
+
+    public void getUsers(String address, FragmentActivity activity) {
+        String URL = "http://" + address + ":8082/api/v1/users";
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, URL, null, response -> {
+            Log.d("Users response", response.toString());
+            activity.runOnUiThread(() -> {
+                ADDRESS = address;
+                Toast.makeText(context, "✅ Connected to server", Toast.LENGTH_SHORT).show();
+                context.getSharedPreferences("addressIP", MODE_PRIVATE).edit().putString("addressIP", address).apply();
+                Intent intent = new Intent(context, HomeActivity.class);
+                intent.putExtra("username", activity.getIntent().getStringExtra("username"));
+                context.startActivity(intent);
+                activity.finish();
+            });
+        }, error -> {
+            Toast.makeText(context, "❌ Bad IP address", Toast.LENGTH_SHORT).show();
+            AddressIPSetter addressIPSetter = AddressIPSetter.newInstance();
+            addressIPSetter.show(activity.getSupportFragmentManager(), AddressIPSetter.TAG);
+        });
         requestQueue.add(jsonArrayRequest);
     }
 
@@ -110,8 +186,33 @@ public class RequestHandler {
         requestQueue.add(jsonObjectRequest);
     }
 
+    public void deleteUser(String username) {
+        String url = URL + "/" + username;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, null, response -> {
+            Toast.makeText(context, "✅ Account deleted successfully", Toast.LENGTH_SHORT).show();
+            System.out.println(response);
+        }, Throwable::printStackTrace);
+        requestQueue.add(jsonObjectRequest);
+    }
+
+    public void changeUsername(String username, String newUsername) throws JSONException {
+        String url = URL + "/" + username;
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("username", newUsername);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, jsonObject, response -> {
+            Toast.makeText(context, "✅ Username updated successfully", Toast.LENGTH_SHORT).show();
+            System.out.println(response);
+        }, Throwable::printStackTrace);
+        requestQueue.add(jsonObjectRequest);
+    }
+
     public interface TaskCallback {
         void onCallback(List<Task> tasks);
+    }
+
+    public void showAddressIPSetter(SplashActivity splashActivity) {
+        AddressIPSetter addressIPSetter = AddressIPSetter.newInstance();
+        addressIPSetter.show(splashActivity.getSupportFragmentManager(), AddressIPSetter.TAG);
     }
 
 }
