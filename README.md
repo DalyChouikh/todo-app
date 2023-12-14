@@ -57,3 +57,12 @@ Launch the app.
 ## Purpose of the Project
 
 * This project was developed as part of a university assignment to demonstrate proficiency in Android app development. It serves as a practical implementation of concepts learned during the course.
+
+## Contributors
+
+* [Daly Chouikh](https://www.github.com/DalyChouikh)
+
+## Demo Video of the App
+
+[![Demo Video](https://drive.google.com/file/d/11JFZtPTqhcAzUSG69zDVSKb8BxZSn4n9/view?usp=sharing)](https://drive.google.com/file/d/11JFZtPTqhcAzUSG69zDVSKb8BxZSn4n9/view?usp=sharing)
+
