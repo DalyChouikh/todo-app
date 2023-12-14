@@ -64,5 +64,5 @@ Launch the app.
 
 ## Demo Video of the App
 
-[![Demo Video](Demo Video)](https://drive.google.com/file/d/11JFZtPTqhcAzUSG69zDVSKb8BxZSn4n9/view?usp=sharing)
+[![Demo Video]](https://drive.google.com/file/d/11JFZtPTqhcAzUSG69zDVSKb8BxZSn4n9/view?usp=sharing)
 
