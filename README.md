@@ -29,7 +29,7 @@ This Android application provides a user-friendly platform for managing tasks wh
 
 1. Clone the project repository using Git.
 2. Open the project in Android Studio.
-3. Connect your Android device or emulator.
+3. Connect your Android device (Recommended) or emulator.
 4. Run the app in Android Studio.
 
 ## Usage
