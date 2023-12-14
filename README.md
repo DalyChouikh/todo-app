@@ -24,6 +24,8 @@ This Android application provides a user-friendly platform for managing tasks wh
 
 * Java
 * Android Studio
+* Spring Boot ([to-do-list](https://www.github.com/DalyChouikh/to-do-list))
+* MySQL ([to-do-list](https://www.github.com/DalyChouikh/to-do-list))
 
 ## Installation
 
