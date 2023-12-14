@@ -2,6 +2,7 @@ package dev.daly.todo_app.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -21,7 +22,8 @@ import dev.daly.todo_app.DialogInterface;
 import dev.daly.todo_app.RequestHandler;
 import dev.daly.todo_app.databinding.ActivitySplashBinding;
 
-public class SplashActivity extends AppCompatActivity implements DialogInterface {
+@SuppressLint("CustomSplashScreen")
+public class SplashActivity extends AppCompatActivity {
 
     ActivitySplashBinding binding;
     RequestHandler requestHandler;
@@ -42,9 +44,4 @@ public class SplashActivity extends AppCompatActivity implements DialogInterface
         }
     }
 
-
-    @Override
-    public void handleDialogClose(android.content.DialogInterface dialogInterface) {
-        requestHandler.getUsers(RequestHandler.ADDRESS, this);
-    }
 }

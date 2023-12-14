@@ -2,6 +2,7 @@ package dev.daly.todo_app;
 
 
 import static android.content.Context.MODE_PRIVATE;
+import static android.content.Intent.getIntent;
 import static androidx.core.content.ContextCompat.startActivity;
 
 import android.app.Activity;
@@ -122,27 +123,6 @@ public class RequestHandler {
         requestQueue.add(jsonArrayRequest);
     }
 
-    public void getUsers(String address, FragmentActivity activity) {
-        String URL = "http://" + address + ":8082/api/v1/users";
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, URL, null, response -> {
-            Log.d("Users response", response.toString());
-            activity.runOnUiThread(() -> {
-                ADDRESS = address;
-                Toast.makeText(context, "✅ Connected to server", Toast.LENGTH_SHORT).show();
-                context.getSharedPreferences("addressIP", MODE_PRIVATE).edit().putString("addressIP", address).apply();
-                Intent intent = new Intent(context, HomeActivity.class);
-                intent.putExtra("username", activity.getIntent().getStringExtra("username"));
-                context.startActivity(intent);
-                activity.finish();
-            });
-        }, error -> {
-            Toast.makeText(context, "❌ Bad IP address", Toast.LENGTH_SHORT).show();
-            AddressIPSetter addressIPSetter = AddressIPSetter.newInstance();
-            addressIPSetter.show(activity.getSupportFragmentManager(), AddressIPSetter.TAG);
-        });
-        requestQueue.add(jsonArrayRequest);
-    }
-
     public void updateTask(String username, String oldTitle, String newTitle) throws JSONException {
         String url = URL + "/" + username + "/tasks/" + oldTitle.replaceAll(" ", "%20");
         JSONObject jsonObject = new JSONObject();
@@ -210,9 +190,34 @@ public class RequestHandler {
         void onCallback(List<Task> tasks);
     }
 
+    public void getUsers(String address, FragmentActivity activity) {
+        String URL = "http://" + address + ":8082/api/v1/users";
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, URL, null, response -> {
+            Log.d("Users response", response.toString());
+            activity.runOnUiThread(() -> {
+                ADDRESS = address;
+                Toast.makeText(context, "✅ Connected to server", Toast.LENGTH_SHORT).show();
+                context.getSharedPreferences("addressIP", MODE_PRIVATE).edit().putString("addressIP", address).apply();
+                Intent intent;
+                if (context.getSharedPreferences("rememberMe", MODE_PRIVATE).getBoolean("rememberMe", false)) {
+                    intent = new Intent(context, HomeActivity.class);
+                    intent.putExtra("username", activity.getIntent().getStringExtra("username"));
+                } else {
+                    intent = new Intent(context, LoginActivity.class);
+                }
+                context.startActivity(intent);
+                activity.finish();
+            });
+        }, error -> {
+            Toast.makeText(context, "❌ Bad IP address", Toast.LENGTH_SHORT).show();
+        });
+        requestQueue.add(jsonArrayRequest);
+    }
+
     public void showAddressIPSetter(SplashActivity splashActivity) {
         AddressIPSetter addressIPSetter = AddressIPSetter.newInstance();
         addressIPSetter.show(splashActivity.getSupportFragmentManager(), AddressIPSetter.TAG);
+        addressIPSetter.setCancelable(false);
     }
 
 }
