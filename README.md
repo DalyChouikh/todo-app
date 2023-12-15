@@ -53,7 +53,7 @@ Launch the app.
 
 ## Session Management
 
-1. Once logged in, you will remain logged in until you explicitly log out.
+1. Once logged in, if you checked the Remember Me option, you will remain logged in until you explicitly log out.
 2. To log out, click the menu icon and select "Log Out".
 
 ## Purpose of the Project
